@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+
 
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile _grasstile, _watertile;
     [SerializeField] private Transform _cam;
+    [SerializeField] private Tilemap tilemap;
 
     private Dictionary<Vector2, Tile> _tiles = new Dictionary<Vector2, Tile>();
 
@@ -46,9 +49,11 @@ public class GridManager : MonoBehaviour
             }
             
         }
-        
+        float displaceX = _width/2 - 0.5f;
+        float displaceY = _height/2 - 0.5f;
 
-        _cam.transform.position = new Vector3((float)_width/2 - 0.5f, (float)_height/2 - 0.5f, -10);
+        tilemap.transform.position = new Vector3(displaceX, displaceY, 0);
+        _cam.transform.position = new Vector3(displaceX, displaceY, -10);
     }
 
     public Tile GetTileAt(Vector2 pos) {
