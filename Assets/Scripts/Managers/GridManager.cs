@@ -7,19 +7,21 @@ using UnityEngine.Tilemaps;
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private int _width, _height;
-    [SerializeField] private Tile _grasstile, _watertile;
+    [SerializeField] private GridTile _grasstile, _watertile;
     [SerializeField] private Transform _cam;
     [SerializeField] private Tilemap tilemap;
-
-    private Dictionary<Vector2, Tile> _tiles = new Dictionary<Vector2, Tile>();
+    [SerializeField] private GameObject tm_manager; 
+    
+    private Dictionary<Vector2, GridTile> _tiles = new Dictionary<Vector2, GridTile>();
 
     // Start is called before the first frame update
     void Start()
-    {
-        GenerateGrid();
+    { 
+        generateGrid();
+        assignSprites();
     }
 
-    void GenerateGrid() {
+    void generateGrid() {
         // Creating grid
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
@@ -33,7 +35,7 @@ public class GridManager : MonoBehaviour
 
         // Assigning direction pointers for each tile
         foreach (Vector2 pos in _tiles.Keys) {
-            Tile currtile = _tiles[pos];
+            GridTile currtile = _tiles[pos];
             
             if (_tiles.ContainsKey(pos + Vector2.up)) {
                 currtile.up = _tiles[pos + Vector2.up];
@@ -51,12 +53,28 @@ public class GridManager : MonoBehaviour
         }
         float displaceX = _width/2 - 0.5f;
         float displaceY = _height/2 - 0.5f;
+        
+        // no longer need tilemap transform since sprites are integrated with grid
+        Vector3 tilemappos =  new Vector3(displaceX, displaceY, 0);
 
-        tilemap.transform.position = new Vector3(displaceX, displaceY, 0);
+        tilemap.transform.Translate(tilemappos);
+        // tilemap.origin = Vector3Int.FloorToInt(tilemappos)
         _cam.transform.position = new Vector3(displaceX, displaceY, -10);
     }
 
-    public Tile GetTileAt(Vector2 pos) {
+    /* 
+    Assigns each Tile from Tilemap at each position to the corresponding tiles at Grid
+    */
+    void assignSprites() {
+        foreach (Vector2 pos in _tiles.Keys) {
+            Vector3Int changedpos = Vector3Int.FloorToInt(pos);
+            Sprite currsprite = tilemap.GetSprite(changedpos);
+            getTileAt(pos).ChangeSprite(currsprite);
+        }
+        tm_manager.SetActive(false);
+    }
+
+    public GridTile getTileAt(Vector2 pos) {
         if (_tiles.TryGetValue(pos, out var tile)) {
             return tile;
         } 
