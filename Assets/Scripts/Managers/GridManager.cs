@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GridTile _grasstile, _watertile;
     [SerializeField] private Transform _cam;
     [SerializeField] private Tilemap tilemap;
+    // Must attach a "tilemap manager" GameObject so the tilemaps can be hidden, otherwise it can't
     [SerializeField] private GameObject tm_manager; 
     
     private Dictionary<Vector2, GridTile> _tiles = new Dictionary<Vector2, GridTile>();
@@ -63,7 +64,8 @@ public class GridManager : MonoBehaviour
     }
 
     /* 
-    Assigns each Tile from Tilemap at each position to the corresponding tiles at Grid
+    Changes each Tile's sprite to the corresponding sprite of the same coordinates on the Tilemap
+    Then, it turns off the Tilemap as it is no longer used
     */
     void assignSprites() {
         foreach (Vector2 pos in _tiles.Keys) {

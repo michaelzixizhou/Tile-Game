@@ -12,8 +12,7 @@ public class GridTile : MonoBehaviour
     public GridTile left = null;
     public GridTile right = null;
 
-    // Start is called before the first frame update
-
+    // Adds reference to its own SpriteRenderer
     public virtual void Init() {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         
@@ -26,6 +25,7 @@ public class GridTile : MonoBehaviour
         _highlight.SetActive(false);
     }
 
+    // Changes the current Tile's sprite to input sprite
     public void ChangeSprite(Sprite sprite) {
         spriteRenderer.sprite = sprite;
     }
