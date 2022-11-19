@@ -7,5 +7,6 @@ public class WaterTile : GridTile
     public override void Init()
     {
         base.Init();
+        elevation = -1;
     }
 }

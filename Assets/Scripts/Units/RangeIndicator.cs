@@ -21,7 +21,7 @@ public class RangeIndicator : MonoBehaviour
     //Get the range variable from the character script
     void Start()
     {
-       range = gameObject.GetComponent<Character>().move_range;
+       range = gameObject.GetComponent<Unit>().move_range;
     }
 
     void OnMouseDown(){

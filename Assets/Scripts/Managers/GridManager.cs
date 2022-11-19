@@ -3,31 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
+/*
+Use GridManager.GetTileAt() to get tile at Vector2(x, y).
+Please check GenerateGrid() documentation for more info
+*/
 public class GridManager : MonoBehaviour
 {
+    public static GridManager instance;
     [SerializeField] private int _width, _height;
-    [SerializeField] private GridTile _grasstile, _watertile;
     [SerializeField] private Transform _cam;
-    [SerializeField] private Tilemap tilemap;
-    // Must attach a "tilemap manager" GameObject so the tilemaps can be hidden, otherwise it can't
-    [SerializeField] private GameObject tm_manager; 
+    [SerializeField] private TileManager tileManager;
+    [SerializeField] private TilemapManager tilemapManager; 
     
     private Dictionary<Vector2, GridTile> _tiles = new Dictionary<Vector2, GridTile>();
 
+    private void Awake() {
+        instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     { 
-        generateGrid();
-        assignSprites();
+        GenerateGrid();
+        // toggle off the elevation layer
+        tilemapManager.Toggle(tilemapManager.elevationTilemap, false);
     }
 
-    void generateGrid() {
+    /*
+    This creates a _width * _height grid that takes in the elevation
+    map, and instantiates tiles based on the color at (x, y). The
+    instantiated tiles are then stored in a dictionary of 
+    Vector2: GridTile format. 
+
+    Each tile is assigned a pointer to each of its neighbours in 
+    the directions of Up, Down, Left, Right
+
+    Check TileManager.AssignTile() for more documentation on elevation
+    Check GridTile for more documentation on pointers
+
+    ========= PRECONDITIONS =========
+    dimensions of grid == dimensions of tilemaps
+    */
+    void GenerateGrid() {
         // Creating grid
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                var randomTile = Random.Range(0, 6) == 3 ? _watertile : _grasstile;
-                var spawnedTile = Instantiate(randomTile, new Vector3(x, y), Quaternion.identity);
+                Vector3 currpos = new Vector3(x, y);
+                // check tile type from elevation map
+                var spawnedTile = Instantiate(tileManager.assignTile(currpos, tilemapManager.elevationTilemap), currpos, Quaternion.identity);
                 spawnedTile.name = $"Tile {x} {y}";
                 spawnedTile.Init();
                 _tiles.Add(new Vector2(x, y), spawnedTile);
@@ -57,26 +79,25 @@ public class GridManager : MonoBehaviour
         
         // no longer need tilemap transform since sprites are integrated with grid
         Vector3 tilemappos =  new Vector3(displaceX, displaceY, 0);
-
-        tilemap.transform.Translate(tilemappos);
+        
+        tilemapManager.groundTilemap.transform.Translate(tilemappos);
+        tilemapManager.abovegroundTilemap.transform.Translate(tilemappos);
         // tilemap.origin = Vector3Int.FloorToInt(tilemappos)
         _cam.transform.position = new Vector3(displaceX, displaceY, -10);
     }
 
     /* 
-    Changes each Tile's sprite to the corresponding sprite of the same coordinates on the Tilemap
-    Then, it turns off the Tilemap as it is no longer used
+    Changes each GridTile's sprite to the corresponding sprite of the same coordinates on the Tilemap
     */
-    void assignSprites() {
+    private void AssignSprites() {
         foreach (Vector2 pos in _tiles.Keys) {
             Vector3Int changedpos = Vector3Int.FloorToInt(pos);
-            Sprite currsprite = tilemap.GetSprite(changedpos);
-            getTileAt(pos).ChangeSprite(currsprite);
+            Sprite currsprite = tilemapManager.groundTilemap.GetSprite(changedpos);
+            GetTileAt(pos).ChangeSprite(currsprite);
         }
-        tm_manager.SetActive(false);
     }
 
-    public GridTile getTileAt(Vector2 pos) {
+    public GridTile GetTileAt(Vector2 pos) {
         if (_tiles.TryGetValue(pos, out var tile)) {
             return tile;
         } 

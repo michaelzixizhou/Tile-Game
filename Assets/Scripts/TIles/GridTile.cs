@@ -5,24 +5,35 @@ using UnityEngine.UI;
 
 public class GridTile : MonoBehaviour
 {
-    [SerializeField] private GameObject _highlight;
     [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected int elevation;
     public GridTile up = null;
     public GridTile down = null;
     public GridTile left = null;
     public GridTile right = null;
 
+    private Color baseColor = new Color(1f, 1f, 1f, 0f);
+    private Color onHoverColor = new Color(1f, 1f, 1f, 0.5f);
+
     // Adds reference to its own SpriteRenderer
     public virtual void Init() {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        
+        spriteRenderer.color = baseColor;
+        spriteRenderer.sortingOrder = 10;
     }
+
+    // Highlight System
     private void OnMouseEnter() {
-        _highlight.SetActive(true);
+        spriteRenderer.color = onHoverColor;
     }
 
     private void OnMouseExit() {
-        _highlight.SetActive(false);
+        spriteRenderer.color = baseColor;
+    }
+
+    // Returns GridTile elevation integer
+    public int getElevation() {
+        return elevation;
     }
 
     // Changes the current Tile's sprite to input sprite
