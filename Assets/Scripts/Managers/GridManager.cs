@@ -26,6 +26,8 @@ public class GridManager : MonoBehaviour
         GenerateGrid();
         // toggle off the elevation layer
         tilemapManager.Toggle(tilemapManager.elevationTilemap, false);
+        // Gorilla gorilla = new Gorilla();
+        // UnitManager.instance.spawnUnit(gorilla, Vector2.zero);
     }
 
     /*
@@ -87,6 +89,8 @@ public class GridManager : MonoBehaviour
     }
 
     /* 
+    O B S O L E T E
+
     Changes each GridTile's sprite to the corresponding sprite of the same coordinates on the Tilemap
     */
     private void AssignSprites() {
@@ -97,6 +101,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    // Get tile at Vector2 coord
     public GridTile GetTileAt(Vector2 pos) {
         if (_tiles.TryGetValue(pos, out var tile)) {
             return tile;

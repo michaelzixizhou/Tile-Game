@@ -9,15 +9,18 @@ This will be called by GameManager to perform said actions
 */
 public class UnitManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static UnitManager instance;
+    public static ArrayList UnitList = new ArrayList();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void Awake() {
+        instance = this;
+    }
+    
+
+    // spawn a unit, NOT WORKING RIGHT NOW
+    public void spawnUnit(Unit unit, Vector2 pos) {
+        Vector3 currpos = pos;
+        var spawnedUnit = Instantiate(unit, currpos, Quaternion.identity);
+        UnitList.Add(spawnedUnit);
     }
 }

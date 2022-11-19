@@ -23,16 +23,17 @@ public class TileManager : MonoBehaviour
     private void Awake() {
         instance = this;
     }
+    
     /*
     Returns the tile type at given location in elevation map
     Used to initialize the board
 
     Each color indicates a different elevation:
-    -2: Grey
-    -1: Blue
-    0: Green
-    1: Yellow
-    2: Red
+    -2: Grey, VoidTile
+    -1: Blue, WaterTile
+    0: Green, GrassTile
+    1: Yellow, HillTile
+    2: Red, MountainTile
     The colors used are the built in Color.insertcolor ones
     */
     public GridTile assignTile(Vector3 pos, Tilemap tilemap) {
