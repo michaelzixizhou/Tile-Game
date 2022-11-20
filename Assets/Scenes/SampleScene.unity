@@ -3407,6 +3407,35 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2057639029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057639024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d2edc9f9f2d70c43b5682b283e811d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 5
+  move_range: 2
+--- !u!114 &2057639030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057639024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0d778e68ec5eb49a6fe939c525b3bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _range: {fileID: -4657166437331434483, guid: 8da6b246ad4d049409a518abf4c965a4, type: 3}
+  _unitSelect: {fileID: -4657166437331434483, guid: 0a7882b4d9fee4b49a2df02fc1e80c36, type: 3}
+  pos: {x: 0, y: 0, z: 0}
 --- !u!114 &2083074982 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3096803153053557541, guid: 8ac8fd2ad66634494a1f5cc8037527c6, type: 3}

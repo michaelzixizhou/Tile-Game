@@ -6,7 +6,7 @@ using UnityEngine;
 Gorilla character
 */
 
-public class Gorilla : Character
+public class Gorilla : Unit
 {
     void Start()
     {
