@@ -6,7 +6,7 @@ using UnityEngine;
 This is the base character class universal variables such as health, move_range can be found here
 */
 
-public class Unit : MonoBehaviour
+public class Character : MonoBehaviour
 {
     public int health;
     

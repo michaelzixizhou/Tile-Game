@@ -10,37 +10,26 @@ public class RangeIndicator : MonoBehaviour
 {
     [SerializeField] public RangeTile _range;
 
-    [SerializeField] public RangeTile _unitSelect;
-
-    private RangeTile unitTile;
-
     public Vector3 pos;
 
-    private int range;
+    public int range;
 
     private List<RangeTile> _range_tiles = new List<RangeTile>();
 
     private bool isOn = false;
 
-    private bool smartDrag;
-
-    private bool isDragged;
-
     //Get the range variable from the character script
     void Start()
     {
-       range = gameObject.GetComponent<Unit>().move_range;
-       smartDrag = gameObject.GetComponent<DragAndDropController>().smartDrag;
+       range = gameObject.GetComponent<Character>().move_range;
     }
 
     void OnMouseDown(){
-        isDragged = gameObject.GetComponent<DragAndDropController>().isDragged;
         //if the range indicator is not on yet
-        if (!isDragged && !isOn){
+        if (!isOn){
             //get the position of the character
             pos = gameObject.GetComponent<Transform>().position;
             //goes through a sqaure of range x range to find the indicator tiles
-            unitTile = Instantiate(_unitSelect, new Vector3(pos.x, pos.y), Quaternion.identity);
             for(int x = 0; x < 2 * range + 1; x++)
             {
                 for(int y = 0; y < 2 * range + 1; y++){
@@ -54,16 +43,15 @@ public class RangeIndicator : MonoBehaviour
                 }
             }
             isOn = true;
-        
-        }
-    }
-    void OnMouseUp(){
-        //destroys all range tiles and isOn is set to false
+        //if range indicator is already on
+        }else{
+            //destroys all range tiles and isOn is set to false
             while(_range_tiles.Count > 0){
                 Destroy(_range_tiles[0].gameObject);
                 _range_tiles.RemoveAt(0);
             }
-            Destroy(unitTile.gameObject);
             isOn = false;
-    }     
+        }
+        
+    }
 }
