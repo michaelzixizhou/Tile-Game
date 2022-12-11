@@ -2,16 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-Gorilla character
-*/
-
-public class Gorilla : Unit
-{
-    void Awake()
+public class Cow : Unit
+{    void Awake()
     {
         health = 5;
-        move_range = 2;
+        move_range = 3;
     }
     public override void Ability() {
         

@@ -23,35 +23,32 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     { 
-        GenerateGrid();
         // toggle off the elevation layer
-        tilemapManager.Toggle(tilemapManager.elevationTilemap, false);
-        // Gorilla gorilla = new Gorilla();
-        // UnitManager.instance.spawnUnit(gorilla, Vector2.zero);
     }
 
-    /*
-    This creates a _width * _height grid that takes in the elevation
-    map, and instantiates tiles based on the color at (x, y). The
-    instantiated tiles are then stored in a dictionary of 
-    Vector2: GridTile format. 
-
-    Each tile is assigned a pointer to each of its neighbours in 
-    the directions of Up, Down, Left, Right
-
-    Check TileManager.AssignTile() for more documentation on elevation
-    Check GridTile for more documentation on pointers
-
-    ========= PRECONDITIONS =========
-    dimensions of grid == dimensions of tilemaps
-    */
-    void GenerateGrid() {
+    /// <summary>
+    ///     This creates a _width * _height grid that takes in the elevation
+    /// map, and instantiates tiles based on the color at (x, y). The
+    /// instantiated tiles are then stored in a dictionary of 
+    /// Vector2: GridTile format. 
+    /// <br/>
+    /// Each tile is assigned a pointer to each of its neighbours in 
+    /// the directions of Up, Down, Left, Right 
+    /// <br/>
+    /// Check TileManager.AssignTile() for more documentation on elevation.
+    /// Check GridTile for more documentation on pointers
+    /// <br/>
+    /// ========= PRECONDITIONS =========
+    /// <br/>
+    /// dimensions of grid == dimensions of tilemaps
+    /// </summary>
+    public void GenerateGrid() {
         // Creating grid
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                Vector3 currpos = new Vector3(x, y);
+                Vector2 currpos = new Vector2(x, y);
                 // check tile type from elevation map
-                var spawnedTile = Instantiate(tileManager.assignTile(currpos, tilemapManager.elevationTilemap), currpos, Quaternion.identity);
+                var spawnedTile = Instantiate(tileManager.assignTile(currpos, tilemapManager.elevationTilemap), new Vector3(x, y, 1), Quaternion.identity);
                 spawnedTile.name = $"Tile {x} {y}";
                 spawnedTile.Init();
                 _tiles.Add(new Vector2(x, y), spawnedTile);
@@ -84,15 +81,18 @@ public class GridManager : MonoBehaviour
         
         tilemapManager.groundTilemap.transform.Translate(tilemappos);
         tilemapManager.abovegroundTilemap.transform.Translate(tilemappos);
-        // tilemap.origin = Vector3Int.FloorToInt(tilemappos)
+        tilemapManager.elevationTilemap.transform.Translate(tilemappos);
+
         _cam.transform.position = new Vector3(displaceX, displaceY, -10);
+
+        tilemapManager.Toggle(tilemapManager.elevationTilemap, false);
     }
 
-    /* 
-    O B S O L E T E
-
-    Changes each GridTile's sprite to the corresponding sprite of the same coordinates on the Tilemap
-    */
+    /// <summary>
+    /// O B S O L E T E 
+    /// <br/>
+    /// Changes each GridTile's sprite to the corresponding sprite of the same coordinates on the Tilemap
+    /// </summary>
     private void AssignSprites() {
         foreach (Vector2 pos in _tiles.Keys) {
             Vector3Int changedpos = Vector3Int.FloorToInt(pos);
@@ -101,7 +101,11 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    // Get tile at Vector2 coord
+    /// <summary>
+    /// Get tile at given Vector2 coordinate
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GridTile GetTileAt(Vector2 pos) {
         if (_tiles.TryGetValue(pos, out var tile)) {
             return tile;

@@ -10,6 +10,11 @@ public class Unit : MonoBehaviour
 {
     public int health;  
     public int move_range;
+
+    private void Awake() {
+        health = 1;
+        move_range = 1;
+    }
     
     //unit ability attack etc
     public virtual void Ability() { 

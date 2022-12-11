@@ -11,12 +11,17 @@ Other Managers will call GameManager.Instance.ChangeState() to advance the game
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public static event Action<GameState> onGameStateChanged;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private UnitManager unitManager;
+    // public static event Action<GameState> onGameStateChanged;
 
     // Awake calls things before anything else
     // This sets a static variable of itself so every script can access it
     private void Awake() {
         instance = this;
+        unitManager.TestSpawn();
+        gridManager.GenerateGrid();
+
     }
 
     // void Start()
@@ -30,11 +35,14 @@ public class GameManager : MonoBehaviour
         
     }
     
-    /* 
-    changeState will be called by other managers
-    This essentially functions as an if-else loop but it has a constant access time for every case
-    Add GameStates here and method calls under the case to handle logic
-    */
+
+
+    /// <summary>
+    /// changeState will be called by other managers to change game state.
+    /// Add GameStates here and method calls under the case to handle logic.
+    /// </summary>
+    /// <param name="newState"></param>
+    /// <exception cref="ArgumentOutOfRangeException">GameState out of range</exception>
     public void changeState(GameState newState) {
         GameState State = newState;
 

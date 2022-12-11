@@ -36,7 +36,7 @@ public class TileManager : MonoBehaviour
     2: Red, MountainTile
     The colors used are the built in Color.insertcolor ones
     */
-    public GridTile assignTile(Vector3 pos, Tilemap tilemap) {
+    public GridTile assignTile(Vector2 pos, Tilemap tilemap) {
         Vector3Int changedpos = Vector3Int.FloorToInt(pos);
         TileBase currtile = tilemap.GetTile(changedpos);
 

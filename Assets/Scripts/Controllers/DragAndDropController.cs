@@ -8,13 +8,16 @@ public class DragAndDropController : MonoBehaviour
     public bool smartDrag = true;
     public bool isDraggable = true;
     public bool isDragged = false;
+    public RangeIndicator rangeIndicator;
     private int range;
+
     Vector2 initialPositionMouse;
     Vector2 initialPositionObject;
 
     void Start()
     {
-       range = gameObject.GetComponent<Unit>().move_range + 1;
+        range = gameObject.GetComponent<Unit>().move_range + 1;
+        rangeIndicator = gameObject.GetComponent<RangeIndicator>();
     }
 
     // Update is called once per frame
@@ -38,17 +41,18 @@ public class DragAndDropController : MonoBehaviour
         }
     }
 
-    private void OnMouseOver() {
+    private void OnMouseOver() {        
         if (isDraggable && Input.GetMouseButtonDown(0)) {
             if (smartDrag) {
                 initialPositionMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 initialPositionObject = transform.position;
             }
             isDragged = true;
+            rangeIndicator.ShowRange();
         }
     }
-
     private void OnMouseUp() {
         isDragged = false;
+        rangeIndicator.HideRange();
     }
 }
