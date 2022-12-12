@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 /*
 GameManager will handle switching game states as the overarching controller
@@ -17,11 +16,9 @@ public class GameManager : MonoBehaviour
 
     // Awake calls things before anything else
     // This sets a static variable of itself so every script can access it
-    private void Awake() {
-        instance = this;
+    private void Start() {
         unitManager.TestSpawn();
         gridManager.GenerateGrid();
-
     }
 
     // void Start()
@@ -63,8 +60,9 @@ public class GameManager : MonoBehaviour
             case GameState.Defeat:
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
-       }
+                // throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+                break;
+        }
 
     //    onGameStateChanged?.Invoke(newState);
     }
