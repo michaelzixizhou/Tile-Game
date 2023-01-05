@@ -7134,7 +7134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_health: 0
   curr_health: 0
-  move_range: 0
+  move_range: 5
   healthBar: {fileID: 824846207}
 --- !u!4 &2057639034 stripped
 Transform:
