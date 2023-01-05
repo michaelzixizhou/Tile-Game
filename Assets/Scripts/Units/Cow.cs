@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Cow : Unit
-{    void Awake()
+{    
+    void Awake()
     {
-        health = 5;
+        max_health = 5;
         move_range = 3;
+        SetHP(max_health);
     }
+
     public override void Ability() {
         
     }

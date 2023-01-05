@@ -6,8 +6,9 @@ public class Toucan : Unit
 {
     void Awake()
     {
-        health = 3;
+        max_health = 3;
         move_range = 4;
+        SetHP(max_health);
     }
     public override void Ability() {
         

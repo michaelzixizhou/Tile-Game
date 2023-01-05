@@ -10,28 +10,20 @@ Other Managers will call GameManager.Instance.ChangeState() to advance the game
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    [SerializeField] private GridManager gridManager;
-    [SerializeField] private UnitManager unitManager;
     // public static event Action<GameState> onGameStateChanged;
-
-    // Awake calls things before anything else
-    // This sets a static variable of itself so every script can access it
+    private void Awake() {
+        instance = this;
+    }
     private void Start() {
-        unitManager.TestSpawn();
-        gridManager.GenerateGrid();
+        // UnitManager.instance.TestSpawn();
+        GridManager.instance.GenerateGrid();
+        // print(UnitManager.instance.GetUnit("Gorilla").GetComponent<Gorilla>().curr_health);
     }
 
     // void Start()
     // {
     //     changeState(GameState.GenerateGrid);
     // }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
 
 
     /// <summary>

@@ -11,9 +11,9 @@ This will be called by GameManager to perform said actions
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager instance;
-    public static Dictionary<string, GameObject> unitList = new Dictionary<string, GameObject>();
-    public static Dictionary<Vector2, GameObject> unitPositions = new Dictionary<Vector2, GameObject>();
-    public static Sprite[] spriteArray;
+    private Dictionary<string, GameObject> unitList = new Dictionary<string, GameObject>();
+    private Dictionary<Vector2, GameObject> unitPositions = new Dictionary<Vector2, GameObject>();
+    private Sprite[] spriteArray;
 
 
     private void Awake() {
@@ -72,6 +72,14 @@ public class UnitManager : MonoBehaviour
                 print("An animal with this name does not exist");
                 break;
         }
+    }
+
+    public GameObject GetUnit(string name){
+        return unitList[name];
+    }
+
+    public GameObject GetUnit(Vector2 coord){
+        return unitPositions[coord];
     }
 
     public void TestSpawn(){
