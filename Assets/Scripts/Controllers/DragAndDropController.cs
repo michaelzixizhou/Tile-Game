@@ -8,9 +8,9 @@ public class DragAndDropController : MonoBehaviour
     public bool smartDrag = true;
     public bool isDraggable = true;
     public bool isDragged = false;
+    public bool isSelected = false;
     public RangeIndicator rangeIndicator;
     private int range;
-
     Vector2 initialPositionMouse;
     Vector2 initialPositionObject;
 
@@ -29,8 +29,7 @@ public class DragAndDropController : MonoBehaviour
                 transform.position = new_pos;
 
             } else {
-                if(Mathf.Abs(Mathf.RoundToInt(new_pos.y) - Mathf.RoundToInt(initialPositionObject.y)) 
-                + Mathf.Abs(Mathf.RoundToInt(new_pos.x) - Mathf.RoundToInt(initialPositionObject.x)) < range)
+                if(rangeIndicator.inRange(Mathf.RoundToInt(new_pos.x), Mathf.RoundToInt(new_pos.y)))
                 {
                     transform.position = new_pos;
                 }
@@ -51,8 +50,20 @@ public class DragAndDropController : MonoBehaviour
             rangeIndicator.ShowRange();
         }
     }
+    private void OnMouseDown() {        
+        if (!isDraggable && !isSelected) {
+            isSelected = true;
+            rangeIndicator.ShowRange();
+        }else if (!isDraggable && isSelected) {
+            isSelected = false;
+            initialPositionObject = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            rangeIndicator.HideRange();
+        }
+    }
     private void OnMouseUp() {
-        isDragged = false;
-        rangeIndicator.HideRange();
+        if(isDraggable) {
+            isDragged = false;
+            rangeIndicator.HideRange();
+        }
     }
 }

@@ -20,31 +20,56 @@ public class RangeIndicator : MonoBehaviour
 
     private List<Object> _range_tiles = new List<Object>();
 
-    //Get the range variabsle from the character script
-    void Start()
+    public GridManager grid_manager;
+
+    //floodfill algorithm to find places where the character can move
+    public void FloodFill(int x, int y, int moves_left, int prev_tile) {
+        int elevation;
+        bool new_tile = true;
+
+        //scenarios where we should return
+        if (moves_left == 0) return;
+        try {
+            elevation = grid_manager.GetTileAt(new Vector2(x,y)).getElevation();
+        } catch {
+            return;
+        }
+        if (Mathf.Abs(elevation - prev_tile) > 1) return;
+
+        //is this tile not in our list
+        for (int i = 0; i < _range_tiles.Count; i++) {
+            if (_range_tiles[i].name == $"Tile {x} {y}"){
+                new_tile = false;
+            }
+        }
+        
+        //spawns new range indicator tile
+        if (new_tile) {
+            var spawnedTile = Instantiate(_range, new Vector3(x,y), Quaternion.identity);
+            spawnedTile.name = $"Tile {x} {y}";
+            _range_tiles.Add(spawnedTile);
+        }
+
+        // next step four-way
+        FloodFill(x + 1, y, moves_left - 1, elevation);
+        FloodFill(x - 1, y, moves_left - 1, elevation);
+        FloodFill(x, y + 1, moves_left - 1, elevation);
+        FloodFill(x, y - 1, moves_left - 1, elevation);
+    }
+
+    //get variables on awake
+    void Awake()
     {
-        range = gameObject.GetComponent<Unit>().move_range;
+        range = gameObject.GetComponent<Unit>().move_range + 1;
         _range = Resources.Load("RangeSquare");
         _unitSelect = Resources.Load("UnitSelect");
+        grid_manager = GameObject.FindWithTag("GridManager").GetComponent<GridManager>();
     }
 
     public void ShowRange(){
         pos = gameObject.GetComponent<Transform>().position;
-        //goes through a sqaure of range x range to find the indicator tiles
-        unitTile = Instantiate(_unitSelect, new Vector3(pos.x, pos.y), Quaternion.identity);
-        for(int x = 0; x < 2 * range + 1; x++)
-        {
-            for(int y = 0; y < 2 * range + 1; y++){
-                //if the absoluate value of the x and y coordinates is less than or equal to the range the tile should be higlighted
-                if (Mathf.Abs(x - range) + Mathf.Abs(y - range) <= range){
-                    var spawnedTile = Instantiate(_range, new Vector3(pos.x + x - range, pos.y + y - range), Quaternion.identity);
-                    spawnedTile.name = $"Tile {x} {y}";
-                    //adds tiles to list so we can delete later
-                    _range_tiles.Add(spawnedTile);
-                }
-            }
-        }
-        }
+        FloodFill((int) pos.x, (int) pos.y, range, grid_manager.GetTileAt(pos).getElevation());
+    }
 
     public void HideRange(){
         //destroys all range tiles and isOn is set to false
@@ -53,5 +78,19 @@ public class RangeIndicator : MonoBehaviour
             _range_tiles.RemoveAt(0);
         }
         Destroy(unitTile);
-    }     
+    }
+    /// <summary>
+    /// function to see if given position is a legal move based on if it is in range
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    public bool inRange(int x, int y) {
+        for (int i = 0; i < _range_tiles.Count; i++) {
+            if (_range_tiles[i].name == $"Tile {x} {y}"){
+                return true;
+            }
+        } 
+        return false;
+    }  
 }
