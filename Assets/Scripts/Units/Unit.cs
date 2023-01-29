@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     private void Awake() {
         max_health = 1;
         move_range = 1;
-        SetHP(max_health);
+        AddHPBar();
     }
 
     protected void SetHP(int HP) {
@@ -30,11 +30,20 @@ public class Unit : MonoBehaviour
 
     public void TakeHit(int dmg){
         curr_health -= dmg;
-        healthBar.SetHPBar(curr_health, max_health);
+        healthBar.SetHPBar(curr_health);
 
         if (curr_health <= 0){
             Destroy(gameObject);
         }
     }
 
+    protected void AddHPBar() {
+        print("called");
+        GameObject hp = Instantiate(Resources.Load<GameObject>("HPBar"));
+        hp.transform.SetParent(transform);
+
+        healthBar = hp.GetComponent<HealthBarBehaviour>();
+
+        SetHP(max_health);
+    }
 }

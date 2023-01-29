@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
     private void Start() {
-        // UnitManager.instance.TestSpawn();
+        UnitManager.instance.TestSpawn();
         GridManager.instance.GenerateGrid();
         // print(UnitManager.instance.GetUnit("Gorilla").GetComponent<Gorilla>().curr_health);
     }

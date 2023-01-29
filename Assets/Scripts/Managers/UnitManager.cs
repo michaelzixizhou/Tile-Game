@@ -44,9 +44,6 @@ public class UnitManager : MonoBehaviour
         // Drag and drop scripts
         spawnedUnit.AddComponent<DragAndDropController>();
         spawnedUnit.AddComponent<RangeIndicator>();
-        // // Makes the character interactable for some reason
-        spawnedUnit.GetComponent<BoxCollider2D>().isTrigger = true;
-        spawnedUnit.GetComponent<BoxCollider2D>().isTrigger = false;
     }
     
     // helper for spawnUnit, adds the script for given unit name
