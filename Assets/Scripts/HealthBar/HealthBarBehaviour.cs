@@ -20,9 +20,9 @@ public class HealthBarBehaviour : MonoBehaviour
         HPBarAnimation();
     }
     public void SetHPBar(float health, float max_health){
-        slider.value = health;
         slider.maxValue = max_health;
 
+        slider.value = health;
         HPBarAnimation();
     }
 

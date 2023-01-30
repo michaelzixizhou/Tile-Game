@@ -17,8 +17,4 @@ public class Gorilla : Unit
     public override void Ability() {
         
     }
-
-    private void OnMouseDown() {
-        TakeHit(1);
-    }
 }
