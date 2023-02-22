@@ -65,6 +65,10 @@ public class UnitManager : MonoBehaviour
                 unit.AddComponent<Toucan>();
                 unit.GetComponent<SpriteRenderer>().sprite = spriteArray[3];
                 break;
+            case "Dummy":
+                unit.AddComponent<Dummy>();
+                unit.GetComponent<SpriteRenderer>().sprite = spriteArray[1];
+                break;
             default:
                 print("An animal with this name does not exist");
                 break;
@@ -84,5 +88,6 @@ public class UnitManager : MonoBehaviour
         SpawnUnit("Cow", new Vector2(3, 2));
         SpawnUnit("Toucan", new Vector2(4, 5));
         SpawnUnit("Gorilla", new Vector2(3, 3));
+        SpawnUnit("Dummy", new Vector2(6, 6));
     }
 }
