@@ -4,71 +4,69 @@ using UnityEngine;
 
 public class DragAndDropController : MonoBehaviour
 {   
-    public bool snapToGrid = true;
-    public bool smartDrag = true;
     public bool isDraggable = false;
-    public bool isDragged = false;
     public bool isSelected = false;
-    public bool mouseUp = true;
     public RangeIndicator rangeIndicator;
     private int range;
-    Vector2 initialPositionMouse;
     Vector2 initialPositionObject;
 
     void Start()
     {
         range = gameObject.GetComponent<Unit>().move_range + 1;
         rangeIndicator = gameObject.GetComponent<RangeIndicator>();
+        transform.position = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (isDragged){
-            var new_pos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (!smartDrag){
-                transform.position = new_pos;
+        //update new position to mouse position
+        Vector2Int new_pos = Vector2Int.RoundToInt((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        
+        if (rangeIndicator.inRange(new_pos.x, new_pos.y)) {
+            transform.position = new Vector2(new_pos.x, new_pos.y);
+        } else if (!isDraggable) {
+            transform.position = initialPositionObject;
+        }
+    }
 
-            } else {
-                if (rangeIndicator.inRange(Mathf.RoundToInt(new_pos.x), Mathf.RoundToInt(new_pos.y))){
-                    transform.position = new_pos;
-                } else if (!isDraggable){
-                    transform.position = initialPositionObject;
-                }
-            }
-            if (snapToGrid) {
-                transform.position = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
-            }
-        //}
-        if (!isDraggable && !isSelected && Input.GetMouseButton(0) && mouseUp) {
+    private void OnMouseDown() {        
+        //for dragging movement
+        if (isDraggable) {
+            initialPositionObject = transform.position;   
             isSelected = true;
             rangeIndicator.ShowRange();
-            mouseUp = false;
-        } else if (!isDraggable && isSelected && Input.GetMouseButton(0) && mouseUp){
+        //for 2 click movement
+        } else if (!isDraggable) {
+            if (!isSelected) {
+                isSelected = true;
+                rangeIndicator.ShowRange();
+            } else {
+                isSelected = false;
+                initialPositionObject = transform.position;
+                rangeIndicator.HideRange();
+            }
+        }
+    }
+
+    //hide range indicator for dragging movement
+    private void OnMouseUp() {
+        if (isDraggable && isSelected) {
             isSelected = false;
             initialPositionObject = transform.position;
             rangeIndicator.HideRange();
-            mouseUp = false;
-        }
-        if(!Input.GetMouseButton(0)){
-            mouseUp = true;
         }
     }
 
-    private void OnMouseOver() {        
-        if (isDraggable && Input.GetMouseButtonDown(0)) {
-            if (smartDrag) {
-                initialPositionMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                initialPositionObject = transform.position;
-            }
-            isDragged = true;
+    //hover range indicator only for dragging movement
+    private void OnMouseOver() {
+        if(isDraggable && !isSelected){
             rangeIndicator.ShowRange();
         }
     }
 
-    private void OnMouseUp() {
-        if(isDraggable) {
-            isDragged = false;
+    private void OnMouseExit() {
+        if(isDraggable && !isSelected){
             rangeIndicator.HideRange();
         }
     }
