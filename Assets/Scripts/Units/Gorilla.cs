@@ -12,13 +12,9 @@ public class Gorilla : Unit
     {
         max_health = 5;
         move_range = 2;
-        SetHP(max_health);
+        AddHPBar();
     }
     public override void Ability() {
         
     }
-
-    // private void OnMouseDown() {
-    //     TakeHit(1);
-    // }
 }

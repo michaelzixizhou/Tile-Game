@@ -13,10 +13,20 @@ public class HealthBarBehaviour : MonoBehaviour
     private void Awake() {
         offset = new Vector3(0, 0.5f, -1);
     }
-    public void SetHPBar(float health, float max_health){
+
+    public void SetHPBar(float health){
         slider.value = health;
+
+        HPBarAnimation();
+    }
+    public void SetHPBar(float health, float max_health){
         slider.maxValue = max_health;
 
+        slider.value = health;
+        HPBarAnimation();
+    }
+
+    private void HPBarAnimation() {
         slider.fillRect.GetComponent<Image>().color = Color.Lerp(low, high, slider.normalizedValue);
     }
 

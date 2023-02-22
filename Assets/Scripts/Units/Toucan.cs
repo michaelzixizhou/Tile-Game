@@ -8,7 +8,7 @@ public class Toucan : Unit
     {
         max_health = 3;
         move_range = 4;
-        SetHP(max_health);
+        AddHPBar();
     }
     public override void Ability() {
         

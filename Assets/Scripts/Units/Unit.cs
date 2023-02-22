@@ -13,14 +13,16 @@ public class Unit : MonoBehaviour
     public int move_range;
     public HealthBarBehaviour healthBar;
 
-    private void Awake() {
+    private void Awake()
+    {
         max_health = 1;
         move_range = 1;
-        SetHP(max_health);
+        AddHPBar();
     }
 
     protected void SetHP(int HP) {
         curr_health = HP;
+
         healthBar.SetHPBar(curr_health, max_health);
     }
     
@@ -30,11 +32,27 @@ public class Unit : MonoBehaviour
 
     public void TakeHit(int dmg){
         curr_health -= dmg;
-        healthBar.SetHPBar(curr_health, max_health);
+        healthBar.SetHPBar(curr_health);
 
+        var des = false;
         if (curr_health <= 0){
-            Destroy(gameObject);
+            des = true;
+            gameObject.GetComponent<RangeIndicator>().HideRange();
+
         }
+        if (des) Destroy(gameObject);
+
     }
 
+    protected void AddHPBar() {
+        GameObject hp = Instantiate(Resources.Load<GameObject>("HPBar"));
+        hp.transform.SetParent(transform);
+
+        healthBar = hp.GetComponent<HealthBarBehaviour>();
+        SetHP(max_health);
+    }
+
+    private void OnMouseDown() {
+        TakeHit(1);
+    }
 }

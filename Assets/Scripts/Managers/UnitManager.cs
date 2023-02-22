@@ -44,9 +44,6 @@ public class UnitManager : MonoBehaviour
         // Drag and drop scripts
         spawnedUnit.AddComponent<DragAndDropController>();
         spawnedUnit.AddComponent<RangeIndicator>();
-        // // Makes the character interactable for some reason
-        spawnedUnit.GetComponent<BoxCollider2D>().isTrigger = true;
-        spawnedUnit.GetComponent<BoxCollider2D>().isTrigger = false;
     }
     
     // helper for spawnUnit, adds the script for given unit name
@@ -68,6 +65,10 @@ public class UnitManager : MonoBehaviour
                 unit.AddComponent<Toucan>();
                 unit.GetComponent<SpriteRenderer>().sprite = spriteArray[3];
                 break;
+            case "Dummy":
+                unit.AddComponent<Dummy>();
+                unit.GetComponent<SpriteRenderer>().sprite = spriteArray[1];
+                break;
             default:
                 print("An animal with this name does not exist");
                 break;
@@ -87,5 +88,6 @@ public class UnitManager : MonoBehaviour
         SpawnUnit("Cow", new Vector2(3, 2));
         SpawnUnit("Toucan", new Vector2(4, 5));
         SpawnUnit("Gorilla", new Vector2(3, 3));
+        SpawnUnit("Dummy", new Vector2(6, 6));
     }
 }

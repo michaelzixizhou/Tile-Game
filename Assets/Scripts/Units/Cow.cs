@@ -8,7 +8,7 @@ public class Cow : Unit
     {
         max_health = 5;
         move_range = 3;
-        SetHP(max_health);
+        AddHPBar();
     }
 
     public override void Ability() {
