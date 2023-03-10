@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DragAndDropController : MonoBehaviour
 {   
-    public bool isDraggable = false;
+    public bool isDraggable = true;
     public bool isSelected = false;
     public RangeIndicator rangeIndicator;
     private int range;
@@ -25,12 +25,16 @@ public class DragAndDropController : MonoBehaviour
         
         if (rangeIndicator.inRange(new_pos.x, new_pos.y)) {
             transform.position = new Vector2(new_pos.x, new_pos.y);
-        } else if (!isDraggable) {
-            transform.position = initialPositionObject;
-        }
+        } 
+        // else if (!isDraggable) {
+        //     transform.position = initialPositionObject;
+        // }
     }
 
-    private void OnMouseDown() {        
+    private void OnMouseDown() {
+        if (!gameObject.GetComponent<Unit>().curr_team.IsTurn()) {
+            return;
+        }
         //for dragging movement
         if (isDraggable) {
             initialPositionObject = transform.position;   

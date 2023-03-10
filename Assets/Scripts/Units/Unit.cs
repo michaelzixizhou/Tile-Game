@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
     public int curr_health;
     public int move_range;
     public HealthBarBehaviour healthBar;
+    public BaseTeam curr_team;
 
     private void Awake()
     {
@@ -52,7 +53,10 @@ public class Unit : MonoBehaviour
         SetHP(max_health);
     }
 
-    private void OnMouseDown() {
-        TakeHit(1);
+    public void SetTeam(BaseTeam team){
+        curr_team = team;
     }
+    // private void OnMouseDown() {
+    //     TakeHit(1);
+    // }
 }

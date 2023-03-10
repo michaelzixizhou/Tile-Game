@@ -10,21 +10,27 @@ Other Managers will call GameManager.Instance.ChangeState() to advance the game
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public GameState gameState;
     // public static event Action<GameState> onGameStateChanged;
     private void Awake() {
         instance = this;
     }
     private void Start() {
-        UnitManager.instance.TestSpawn();
-        GridManager.instance.GenerateGrid();
+        changeState(GameState.GenerateGrid);
         // print(UnitManager.instance.GetUnit("Gorilla").GetComponent<Gorilla>().curr_health);
     }
-
-    // void Start()
-    // {
-    //     changeState(GameState.GenerateGrid);
-    // }
-
+    private void Update() {
+        /// Press space bar to change between turns
+        if (gameState == GameState.PlayerTurn){
+            if (Input.GetKeyDown(KeyCode.Space)){
+                changeState(GameState.EnemyTurn);
+            }
+        } else if (gameState == GameState.EnemyTurn){
+            if (Input.GetKeyDown(KeyCode.Space)){
+                changeState(GameState.PlayerTurn);
+            }
+        }
+    }
 
     /// <summary>
     /// changeState will be called by other managers to change game state.
@@ -33,19 +39,36 @@ public class GameManager : MonoBehaviour
     /// <param name="newState"></param>
     /// <exception cref="ArgumentOutOfRangeException">GameState out of range</exception>
     public void changeState(GameState newState) {
-        GameState State = newState;
+        gameState = newState;
 
         switch (newState) {
             case GameState.GenerateGrid:
-                // can add methods here for example
+                GridManager.instance.GenerateGrid();
+                changeState(GameState.SpawnEnemies);
+                // Generates the grid
                 break;
             case GameState.SelectCharacters:
                 break;
             case GameState.SpawnEnemies:
+                // spawn and add characters to teams
+                UnitManager.instance.TestSpawn();
+
+                PlayerTeam t1 = TeamManager.instance.GetPlayerTeam();
+                t1.AddUnit(UnitManager.instance.GetUnit("Monkey"));
+                t1.AddUnit(UnitManager.instance.GetUnit("Toucan"));
+
+                EnemyTeam t2 = TeamManager.instance.GetEnemyTeam();
+                t2.AddUnit(UnitManager.instance.GetUnit("Cow"));
+                t2.AddUnit(UnitManager.instance.GetUnit("Gorilla"));
+
+                t1.ToggleMovement();
+                changeState(GameState.PlayerTurn);
                 break;
             case GameState.PlayerTurn:
+                TeamManager.instance.ChangeTurn();
                 break;
             case GameState.EnemyTurn:
+                TeamManager.instance.ChangeTurn();
                 break;
             case GameState.Victory:
                 break;
